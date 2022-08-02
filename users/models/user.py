@@ -28,6 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
     email_verified = models.BooleanField(default=False)
     email_verified_date = models.DateTimeField(blank=True, null=True)
     is_admin = models.BooleanField(default=False)
+    is_locked = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -37,5 +38,5 @@ class User(AbstractBaseUser, PermissionsMixin, SafeDeleteModel):
         return f'{self.first_name} {self.last_name}'
 
     def __str__(self) -> str:
-        return f'ID: {self.id} | name: {self.first_name} {self.last_name} \
-            | email: {self.email_address} | phone: {self.phone_number}'
+        return f'ID: {self.id} | name: {self.first_name} {self.last_name}'\
+            f'| email: {self.email_address} | phone: {self.phone_number}'

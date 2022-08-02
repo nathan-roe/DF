@@ -11,6 +11,8 @@ from util.constants import Constants
 
 
 class RecipientSignUpView(APIView):
+
+    authentication_classes = []
     """
     View for creating a recipient account.
     """
@@ -27,19 +29,22 @@ class RecipientSignUpView(APIView):
             "recaptcha_key": str
         }
         """
-        with transaction.atomic():
-            
-            recipient_data = request.data
+        try:
+            with transaction.atomic():
+                
+                recipient_data = request.data
 
-            # Validate reCaptcha key, email address and raises error if invalid
-            verify_user(request, recipient_data)
+                # Validate reCaptcha key, email address and raises error if invalid
+                verify_user(request, recipient_data)
 
-            recipient_data['email_address'] = recipient_data['email_address'].lower()
+                recipient_data['email_address'] = recipient_data['email_address'].lower()
 
-            recipient_serializer = RecipientAllSerializer(data=recipient_data)
-            recipient_serializer.is_valid()
-            recipient = recipient_serializer.save()
+                recipient_serializer = RecipientAllSerializer(data=recipient_data)
+                recipient_serializer.is_valid()
+                recipient = recipient_serializer.save()
 
-            send_verificiation_email(recipient, Constants.EmailVerificationType.RECIPIENT_VERIFICATION)
+                send_verificiation_email(recipient, type=Constants.EmailVerificationType.RECIPIENT_VERIFICATION)
 
-            return Response(recipient_serializer.data, status=status.HTTP_201_CREATED)
+                return Response(recipient_serializer.data, status=status.HTTP_201_CREATED)
+        except (KeyError, ValueError):
+            return Response(status=status.HTTP_400_BAD_REQUEST)

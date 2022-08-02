@@ -1,1 +1,1 @@
-from df_auth.views.userauthenticationviews import EmailVerificationView
+from df_auth.views.userauthenticationviews import EmailVerificationView, ExpiringAuthTokenView

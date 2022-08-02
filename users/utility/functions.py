@@ -1,3 +1,4 @@
+import base64
 import requests
 from df_auth.models.tokens import EmailVerificationToken
 from util.constants import Constants
@@ -40,7 +41,7 @@ def send_verificiation_email(user, type):
     """
 
     # Create a an email verification token to be sent to the user
-    verification_token = EmailVerificationToken.objects.create(user=user)
+    verification_token = EmailVerificationToken.objects.update_or_create(user=user)[0].key
     # Send correct email based on user type
     # TODO: Add email logic
     if type == Constants.EmailVerificationType.RECIPIENT_VERIFICATION:
@@ -49,3 +50,53 @@ def send_verificiation_email(user, type):
         return verification_token
     else:
         raise ValueError
+
+
+
+def send_email(passcode, email, webUrl, templateName, subject, vars):
+    # verifyUrl = webUrl + passcode
+    # apiKey = get_env("MAILCHIMP_API_KEY")
+    # url = get_env("MAILCHIMP_URL")
+   
+    # headers = {
+    #     'Content-Type': 'application/json',
+    #     'Authorization': 'Basic ' + base64.b64encode(apiKey.encode("utf-8")).decode("utf-8"),
+    #     'Content-Accept': 'application/json'
+    # }
+
+    # json = {
+    #       "key": apiKey,
+    #       "template_name": templateName,
+    #       "template_content": [
+    #           {
+    #               "name": "example name",
+    #               "content": "example content"
+    #           }
+    #       ],
+    #       "message": {
+    #           "subject": subject,
+    #           "from_email": get_env("CONTACT_EMAIL"),
+    #           "to": [
+    #               {
+    #                   "email": email
+    #               }
+    #           ],
+    #           "merge_vars": [
+    #               {
+    #                     "rcpt": email,
+    #                     "vars": [
+    #                         *vars,
+    #                         { "name": "EVLINK", "content": verifyUrl }
+    #                     ]
+    #               }
+    #           ],
+    #           "tags": [
+    #               "validate"
+    #           ]
+    #       }
+    #     }
+
+
+    # resp = requests.post(url, headers=headers, json=json)
+    # return resp
+    return True

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
-from df_auth.models import ExpiringTokenAuthentication as TokenAuthentication
+from df_auth.authentication import ExpiringTokenAuthentication as TokenAuthentication
 
 from donation.models.donationitem import DonationItem
 from donation.serializers.donationitemserializers import DonationItemAllSerializer, \

@@ -1,1 +1,1 @@
-from df_auth.models.tokens import ExpiringToken, EmailVerificationToken, ExpiringTokenAuthentication
+from df_auth.models.tokens import ExpiringToken, EmailVerificationToken
