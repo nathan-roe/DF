@@ -6,7 +6,7 @@ class ErrorLog(models.Model):
     """
     TODO: Add doc string
     """
-    user = models.ForeignKey(User, related_name='error_logs', null=True, blank=True),
+    user = models.ForeignKey(User, related_name='error_logs', on_delete=models.CASCADE, null=True, blank=True),
     error_traceback = models.CharField(max_length=255),
     url_path = models.CharField(max_length=255)
 

@@ -21,9 +21,6 @@ class ExpiringToken(Token):
     TODO: Add doc string
     """
 
-    token_key = models.CharField(max_length=80)
-    created_date = models.DateTimeField(auto_now_add=True)
-
     class Meta(object):
         proxy=True
 
@@ -34,30 +31,32 @@ class ExpiringToken(Token):
         """
         return self.created < timezone.now() - TOKEN_EXPIRE_TIME
 
-    @classmethod
-    def generate_key(cls):
-        return binascii.hexlify(os.urandom(round((random() + 1) * 20))).decode()
-
-    def save(self, *args, **kwargs):
-        self.key = self.generate_key()
-        return super().save(*args, **kwargs)
-
 
 class EmailVerificationToken(models.Model):
     """
     TODO: Add doc string
     """
+    token_key = models.CharField(max_length=80)
+    created_date = models.DateTimeField(auto_now_add=True)
     user = models.OneToOneField(User, related_name='email_verification_token', on_delete=models.CASCADE)
 
-
-    def verify_email(self, user: User) -> None:
+    
+    def verify_email(self) -> None:
         # Set the user's email address as verified
-        user.email_verified = True
-        user.email_verified_date = datetime.now(tz=pytz.utc)
-        user.save()
+        self.user.email_verified = True
+        self.user.email_verified_date = datetime.now(tz=pytz.utc)
+        self.user.save()
 
         # Delete the email verification token used to authenticate the user
         self.delete()
+
+    @classmethod
+    def generate_key(cls):
+        return binascii.hexlify(os.urandom(round((random() + 1) * 20))).decode()
+
+    def save(self, *args, **kwargs):
+        self.token_key = self.generate_key()
+        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f'Email Verification Token: {self.user.full_name} | {self.token_key}'

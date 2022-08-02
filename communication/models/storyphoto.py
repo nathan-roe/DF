@@ -6,4 +6,4 @@ class StoryPhoto(File):
     """
     TODO: Add doc string
     """
-    story = models.ForeignKey(Story, related_name='story_photos')
+    story = models.ForeignKey(Story, related_name='story_photos', on_delete=models.CASCADE)

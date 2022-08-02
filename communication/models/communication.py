@@ -8,7 +8,7 @@ class Communication(SafeDeleteModel):
     """
     TODO: Add doc string
     """
-    user = models.ForeignKey(User, related_name='communications')
+    user = models.ForeignKey(User, related_name='communications', on_delete=models.CASCADE)
     sent_date = models.DateTimeField(auto_now_add=True)
     
     class CommunicationType(models.IntegerChoices):

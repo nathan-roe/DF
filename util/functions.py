@@ -1,10 +1,27 @@
+import os
+from django.core.exceptions import ImproperlyConfigured
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import ValidationError
-from auth.models.tokens import ExpiringToken
+from df_auth.models.tokens import ExpiringToken
 from metrics.models.errorlog import ErrorLog
 
+# environment variable config
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def get_env(env_variable):
+    """
+    Returns environment variable
+    """
+    try:
+        return os.environ[env_variable]
+    except KeyError as key_error:
+        error_msg = f'Set the {env_variable} environment variable'
+        raise ImproperlyConfigured(error_msg) from key_error
 
 def token_to_userprofile(request):
     """
