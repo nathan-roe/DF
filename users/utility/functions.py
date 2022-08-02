@@ -42,6 +42,7 @@ def send_verificiation_email(user, type):
 
     # Create a an email verification token to be sent to the user
     verification_token = EmailVerificationToken.objects.update_or_create(user=user)[0].key
+    print(verification_token)
     # Send correct email based on user type
     # TODO: Add email logic
     if type == Constants.EmailVerificationType.RECIPIENT_VERIFICATION:
