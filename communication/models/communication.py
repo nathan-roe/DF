@@ -6,7 +6,7 @@ from users.models.user import User
 
 class Communication(SafeDeleteModel):
     """
-    TODO: Add doc string
+    Model used for keeping track of communications between users.
     """
     user = models.ForeignKey(User, related_name='communications', on_delete=models.CASCADE)
     sent_date = models.DateTimeField(auto_now_add=True)
